@@ -1,16 +1,31 @@
 import React from 'react';
-import { Typography } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 import Stats from './Stats';
 import Languages from './Languages'
+import Notes from './Notes'
 
 
 export default function Profile(props){
+
+    //UI text
+    const profileTypographyVariant = "h5"
+    const imageAltText = "unable to load"
+    const notesButtonText = "Add Note"
+
+    //UI configuration
+    const buttonColor = "primary"
+    const buttonVariant = "contained"
 
     //styling
     const usernameAndLocationStyle = {
         display: "flex",
         justifyContent: "center",
         marginBottom: '2em'
+    }
+
+    const locationStyle = {
+        marginLeft: '2em',
+        marginRight: '2em'
     }
     
     const imageAndStatsContainerStyle = {
@@ -27,22 +42,39 @@ export default function Profile(props){
     return (
         <div>
             <div style={usernameAndLocationStyle}>
-                <Typography variant="h5" style={{marginRight: '2em'}}>
+                <Typography 
+                    variant={profileTypographyVariant} 
+                >
                     {props.userData.login}
                 </Typography>
-                <Typography variant="h5" style={{marginLeft: '2em'}}>
+                <Typography 
+                    variant={profileTypographyVariant} 
+                    style={locationStyle}
+                >
                     { `Location: 
                     ${(props.userData.location === null)? "Unknown" : 
                         props.userData.location}`}
                 </Typography>
+                <Button
+                    variant={buttonVariant}
+                    color={buttonColor}
+                    onClick={() => props.setAddingNote(true)}
+                >
+                    {notesButtonText}
+                </Button>
             </div>
             <div style={imageAndStatsContainerStyle}>
-                <img src={props.userData.avatar_url} alt="unable to load" style={imageStyle}/>
+                <img src={props.userData.avatar_url} alt={imageAltText} style={imageStyle}/>
                 {(props.userData && props.stats) ? 
                 <Stats stats={props.stats} userData={props.userData} />
                 : null }
             </div>
-            <Languages languages={props.stats.languages} />
+            {(props.stats) ? 
+                <Languages languages={props.stats.languages} repos={props.userData.public_repos}/>
+                : null }
+            <Notes 
+                username={props.userData.login}
+            />
         </div>
     );
 }

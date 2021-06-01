@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Search from './Components/Search';
 import Profile from './Components/Profile';
+import AddNote from './Components/AddNote';
 import { Typography, LinearProgress } from '@material-ui/core'
 
 //object to control display - similar to a Java enum
@@ -15,6 +16,7 @@ var displayOptions = {
 function App() {
   
   //state
+  const [addingNote, setAddingNote] = useState(false)
   const [display, setDisplay] = useState(displayOptions.INITIAL)
   const [userData, setUserData] = useState(null)
   const [stats, setStats] = useState(null)
@@ -35,18 +37,16 @@ function App() {
   }
   
   //methods
+  const displayAddNote = () => {
+    if(addingNote && userData && userData.login){
+      return <AddNote username={userData.login} setAddingNote={setAddingNote}/>;
+    }
+  }
+
   const searchGithub = (event, githubAccount) => {
     event.preventDefault()
     setDisplay(displayOptions.LOADING)
-    fetch(`https://api.github.com/users/${githubAccount}`)
-    .then(response => {
-      if(response.status !== 200) return Promise.reject()
-      else return response.json()
-    })
-    .then(data => {
-      setUserData(data)
-      return data.login
-    })
+    getInitialUserData(githubAccount)
     .then((username) => {
       getAndSetStats(username)
       setDisplay(displayOptions.PROFILE)
@@ -57,10 +57,21 @@ function App() {
     }) 
   }
 
+  const getInitialUserData = async(githubAccount) => [
+    await fetch(`https://api.github.com/users/${githubAccount}`)
+    .then(response => {
+      if(response.status !== 200) return Promise.reject()
+      else return response.json()
+    })
+    .then(data => {
+      setUserData(data)
+      return data.login
+    })
+  ]
+  
   const getAndSetStats = async(username) => {
     const result = await fetch(`https://api.github.com/users/${username}/repos`)
                           .then(response => response.json())
-    console.log(result)
     const stats = calculateStats(result)
     setStats(stats)
   }
@@ -97,6 +108,7 @@ function App() {
   
   return (
     <div className="App">
+      {displayAddNote()}
       <Typography variant="h3" style={appTitleStyle}>{appTitle}</Typography>
       <Search searchGithub={searchGithub} />
       {(display === displayOptions.LOADING) ? <LinearProgress/> : null}
@@ -104,6 +116,7 @@ function App() {
         <Profile 
           userData={userData}
           stats={stats}
+          setAddingNote={setAddingNote}
         /> 
         : null}
         {(display === displayOptions.ERROR) ? 

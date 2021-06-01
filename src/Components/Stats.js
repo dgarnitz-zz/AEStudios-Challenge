@@ -15,7 +15,8 @@ export default function Stats(props) {
     }
 
     const statNameStyle = {
-        width: 240
+        width: '10em',
+        display: 'inline-block'
     }
 
     return (
