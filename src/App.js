@@ -3,15 +3,8 @@ import './App.css';
 import Search from './Components/Search';
 import Profile from './Components/Profile';
 import AddNote from './Components/AddNote';
+import displayOptions from './DisplayOptions';
 import { Typography, LinearProgress } from '@material-ui/core'
-
-//object to control display - similar to a Java enum
-var displayOptions = {
-  INITIAL: {value: 0, name: "Initial"},
-  LOADING: {value: 1, name: "Loading"},
-  PROFILE: {value: 2, name: "Profile"},
-  ERROR: {value: 3, name: "Error"}
-}
 
 function App() {
   

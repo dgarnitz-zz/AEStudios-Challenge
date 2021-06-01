@@ -1,0 +1,31 @@
+Please see: https://github.com/agencyenterprise/hiring-developer?utm_source=a_list%2Fmessage_mailer&utm_medium=email&utm_campaign=message_email
+for project requirements.
+
+UI Considerations
+-I largely followed the diagram in the project requirements when building the UI
+-I chose to use React Material UI for a more pleasing aesthetic. This library offers built in support
+  for mobile responsive UIs. I did not fully implement this requirement due to time constraints but it
+  it would not be difficult to so given the foundation in place.
+-Instead of other styling techniques, I chose to use inline styling for the React components. It is my 
+  understanding that this can be frowned upon for performance reasons. However, based on my previous 
+  experience working with Material UI, it is difficult to override the built in styling without using 
+  inline styling. 
+
+Design Decisions
+-Dataflow: I chose to do data fetching and data processing at the root-level component.
+  In my view, the child components can be treated as only views, responsible for displaying data but not
+  performing any business logic. I am aware there are other design patterns possible.
+-Display state: I chose to break this out into its own object, similar to how ENUMs are used in Java
+-Note storage: This feature is implemented with the browser's localStorage, as that seemed the most 
+  appropriate chose given the time constraints. A rest layer and a data layer would significantly 
+  improve this feature
+
+Error Handling
+-There is only one error message that renders, which is prompted when the HTTP request fails or when 
+  the search term has no results. Although I consider this to be the main scenario where errors could 
+  occur, I acknowledge that this is not exhaustive, due to time constraints, and is a weakness of
+  the project. 
+
+Running the project
+-This project uses Facebook's Create React App as a basis. Please see the README for information on 
+  running it.
